@@ -1,13 +1,13 @@
 """
-Author:         YOUR NAME
-Date:           DATE
-Assignment:     Lab 06
+Author:         Sawyer
+Date:           DATE09/02
+Assignment:     Lab 02 Part B
 Course:         CPSC1051
-Lab Section:    SECTION
+Lab Section:    004
 
-CODE DESCRIPTION:
-
+Code Description: : it simulates ice cream ordering
 """
+
 # Topping class that has the attributes of type and cost.
 class Topping:
     def __init__(self):
@@ -28,6 +28,9 @@ class Topping:
             self.cost = 0.45
         elif self.type == "oreos":
             self.cost = 0.38
+        else:
+            # If somehow called with 'done' or invalid, leave cost alone
+            self.cost = 0.0
 
     def get_type(self):
         """Returns the type of the topping."""
@@ -36,6 +39,7 @@ class Topping:
     def get_cost(self):
         """Returns the cost of the topping."""
         return self.cost
+
 
 # Represent the IceCream that has the following attributes:
 # Flavor, number of scoops, price per scoop, if deluxe or not, list of toppings
@@ -102,10 +106,13 @@ class IceCream:
     def calc_total(self):
         """ Returns the total of the current IceCream."""
         total = self.num_scoops * self.price_per_scoop
+
         if self.is_deluxe_brand:
             total *= 1.42
+
         for t in self.toppings:
             total += t.get_cost()
+
         return total
 
     def ice_cream_info(self):
@@ -121,6 +128,7 @@ class IceCream:
             info += "NONE"
         info += f"\nTotal: ${self.calc_total():.2f}\n"
         return info
+
 
 # Represents the Receipt which has the following attributes:
 # name of the customer and list of ice creams.
@@ -153,43 +161,83 @@ class Receipt:
             print(i.ice_cream_info())
         print(f"Final Total: ${'{:.2f}'.format(self.calc_total())}")
 
+
 def main():
+    # create a receipt for this customer
+    receipt = Receipt()
 
     print("Welcome to Adkins' Scoop City!")
-    print("What is your name?")
+    customer_name = input("What is your name?\n").strip()
+    receipt.set_name(customer_name)
 
+    while True:
+        # build one ice cream order
+        ice_cream = IceCream()
 
-    print("What flavor of ice cream would you like to order?")
-    print("Your options are: Vanilla, Strawberry, Chocolate.")
+        # --- Flavor ---
+        print("What flavor of ice cream would you like to order?")
+        print("Your options are: Vanilla, Strawberry, Chocolate.")
 
-    print("Please put in a valid ice cream flavor.")
+        flavor = input().strip()
+        while not ice_cream.validate_flavor(flavor):
+            print("Please put in a valid ice cream flavor.")
+            flavor = input().strip()
 
+        ice_cream.set_flavor(flavor)
 
-      
-    print("Would you like the deluxe brand? (Yes/No)")
-    print("Please input Yes or No!")
+        # --- Deluxe? ---
+        deluxe_answer = input("Would you like the deluxe brand? (Yes/No)\n").strip().lower()
+        while deluxe_answer not in ["yes", "no", "y", "n"]:
+            print("Please input Yes or No!")
+            deluxe_answer = input().strip().lower()
 
-    print("How many scoops would you like to order?")
+        is_deluxe = deluxe_answer.startswith("y")
+        ice_cream.set_deluxe_brand(is_deluxe)
 
-    print("Please enter a number greater than 0")
+        # --- Scoops ---
+        scoops_valid = False
+        while not scoops_valid:
+            try:
+                scoops = int(input("How many scoops would you like to order?\n").strip())
+                if scoops > 0:
+                    scoops_valid = True
+                else:
+                    print("Please enter a number greater than 0")
+            except ValueError:
+                print("Please enter a number greater than 0")
+        ice_cream.set_num_scoops(scoops)
 
-    print("Which toppings would you like? Enter done if you do not want any.")
-    print("Your options are: sprinkles, gummy bears, oreos.")
+        # --- Toppings ---
+        toppings_list = []
+        print("Which toppings would you like? Enter done if you do not want any.")
+        print("Your options are: sprinkles, gummy bears, oreos.")
 
-        
-    print("Please put in a valid topping type.")
+        while True:
+            topping_choice = input().strip().lower()
 
+            # validate the topping
+            temp_top = Topping()
+            while not temp_top.validate_topping(topping_choice):
+                print("Please put in a valid topping type.")
+                topping_choice = input().strip().lower()
 
-         
-    print(f"Topping {topping.get_type()} added for ${topping.get_cost():.2f}")
-    print("Enter done if you are done selecting toppings, or enter another topping.")
+            # if 'done', stop asking toppings
+            if topping_choice == "done":
+                break
 
-    print("Your order so far:")
+            # otherwise set it and add to list
+            temp_top.set_type(topping_choice)
 
-    print("Would you like to order another ice cream? (Yes/No)")
+            print(f"Topping {temp_top.get_type()} added for ${temp_top.get_cost():.2f}")
+            toppings_list.append(temp_top)
 
-    print("Please input Yes or No!")
+            print("Enter done if you are done selecting toppings, or enter another topping.")
 
-# Runs main
-if __name__ == "__main__":
-    main()
+        # attach toppings to the ice cream object
+        ice_cream.set_toppings(toppings_list)
+
+        # show order so far for this ice cream
+        print("Your order so far:")
+        print(ice_cream.ice_cream_info())
+
+        # ad
