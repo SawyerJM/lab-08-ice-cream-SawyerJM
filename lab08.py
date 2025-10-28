@@ -170,94 +170,80 @@ def main():
     customer_name = input("What is your name?\n").strip()
     receipt.set_name(customer_name)
 
-    while True:
-        # make icecream order
+    ordering = "yes"
+    while ordering == "yes":
         ice_cream = IceCream()
 
-        # ask for flavor-
+        #flavor
         print("What flavor of ice cream would you like to order?")
         print("Your options are: Vanilla, Strawberry, Chocolate.")
-
         flavor = input().strip()
         while not ice_cream.validate_flavor(flavor):
             print("Please put in a valid ice cream flavor.")
             flavor = input().strip()
-
         ice_cream.set_flavor(flavor)
 
-        # ask for deluxe
+        #deluxe
         deluxe_answer = input("Would you like the deluxe brand? (Yes/No)\n").strip().lower()
         while deluxe_answer not in ["yes", "no", "y", "n"]:
             print("Please input Yes or No!")
             deluxe_answer = input().strip().lower()
+        ice_cream.set_deluxe_brand(deluxe_answer.startswith("y"))
 
-        is_deluxe = deluxe_answer.startswith("y")
-        ice_cream.set_deluxe_brand(is_deluxe)
-
-        # create scoops
+        #scoops
+        scoops_str = input("How many scoops would you like to order?\n").strip()
         scoops_valid = False
         while not scoops_valid:
             try:
-                scoops = int(input("How many scoops would you like to order?\n").strip())
+                scoops = int(scoops_str)
                 if scoops > 0:
                     scoops_valid = True
                 else:
                     print("Please enter a number greater than 0")
+                    scoops_str = input().strip()
             except ValueError:
                 print("Please enter a number greater than 0")
+                scoops_str = input().strip()
         ice_cream.set_num_scoops(scoops)
 
-        # create toppings
-        toppings_list = []
+        #get toppings
         print("Which toppings would you like? Enter done if you do not want any.")
         print("Your options are: sprinkles, gummy bears, oreos.")
-
-        while True:
+        toppings_list = []
+        more_toppings = True
+        while more_toppings:
             topping_choice = input().strip().lower()
-
-            # validation
             temp_checker = Topping()
+
             while not temp_checker.validate_topping(topping_choice):
                 print("Please put in a valid topping type.")
                 topping_choice = input().strip().lower()
 
-   
             if topping_choice == "done":
-                break
-
-            # make a real topping object
-            temp_top = Topping()
-            temp_top.set_type(topping_choice)
-
-            # add topping to oist
-            toppings_list.append(temp_top)
-
-
-            print(f"Topping {temp_top.get_type()} added for ${temp_top.get_cost():.2f}")
-            print("Enter done if you are done selecting toppings, or enter another topping.")
-
+                more_toppings = False
+            else:
+                temp_top = Topping()
+                temp_top.set_type(topping_choice)
+                toppings_list.append(temp_top)
+                print(f"Topping {temp_top.get_type()} added for ${temp_top.get_cost():.2f}")
+                print("Enter done if you are done selecting toppings, or enter another topping.")
 
         ice_cream.set_toppings(toppings_list)
 
-        # show order
-        print("Your order so far:")
-        print(ice_cream.ice_cream_info())
-
-        # add icecream to total
+        #add receipt
         receipt.add(ice_cream)
 
-        # sk for another ice cream
+        #prompt for ice cream
         another = input("Would you like to order another ice cream? (Yes/No)\n").strip().lower()
         while another not in ["yes", "no", "y", "n"]:
             print("Please input Yes or No!")
             another = input().strip().lower()
 
         if another.startswith("n"):
-            break 
+            ordering = "no"
 
-
+    #print receipt
     receipt.print_receipt()
-
 
 # Runs main
 if __name__ == "__main__":
