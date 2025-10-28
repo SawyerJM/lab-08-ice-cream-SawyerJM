@@ -234,7 +234,7 @@ def main():
     print("Your order so far:")
     #print recipt
     receipt.print_receipt()
-
+    print("Would you like to order another ice cream? (Yes/No)")
 
 
 # Runs main
