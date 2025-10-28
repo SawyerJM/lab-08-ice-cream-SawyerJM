@@ -240,4 +240,22 @@ def main():
         print("Your order so far:")
         print(ice_cream.ice_cream_info())
 
-        # ad
+        # add this ice cream to the receipt
+        receipt.add(ice_cream)
+
+        # --- Another ice cream? ---
+        another = input("Would you like to order another ice cream? (Yes/No)\n").strip().lower()
+        while another not in ["yes", "no", "y", "n"]:
+            print("Please input Yes or No!")
+            another = input().strip().lower()
+
+        if another.startswith("n"):
+            break  # stop ordering
+
+    # all done, print receipt
+    receipt.print_receipt()
+
+
+# Runs main
+if __name__ == "__main__":
+    main()
