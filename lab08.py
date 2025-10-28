@@ -5,7 +5,7 @@ Assignment:     Lab 02 Part B
 Course:         CPSC1051
 Lab Section:    004
 
-Code Description: : it simulates ice cream ordering
+Code Description: : it simulates ice cream ordering/test
 """
 
 # Topping class that has the attributes of type and cost.
