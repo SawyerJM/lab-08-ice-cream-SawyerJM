@@ -163,7 +163,7 @@ class Receipt:
 
 
 def main():
-    # create a receipt for this customer
+    # start receipt
     receipt = Receipt()
 
     print("Welcome to Adkins' Scoop City!")
@@ -171,10 +171,10 @@ def main():
     receipt.set_name(customer_name)
 
     while True:
-        # build one ice cream order
+        # make icecream order
         ice_cream = IceCream()
 
-        # --- Flavor ---
+        # ask for flavor-
         print("What flavor of ice cream would you like to order?")
         print("Your options are: Vanilla, Strawberry, Chocolate.")
 
@@ -185,7 +185,7 @@ def main():
 
         ice_cream.set_flavor(flavor)
 
-        # --- Deluxe? ---
+        # ask for deluxe
         deluxe_answer = input("Would you like the deluxe brand? (Yes/No)\n").strip().lower()
         while deluxe_answer not in ["yes", "no", "y", "n"]:
             print("Please input Yes or No!")
@@ -194,7 +194,7 @@ def main():
         is_deluxe = deluxe_answer.startswith("y")
         ice_cream.set_deluxe_brand(is_deluxe)
 
-        # --- Scoops ---
+        # create scoops
         scoops_valid = False
         while not scoops_valid:
             try:
@@ -207,7 +207,7 @@ def main():
                 print("Please enter a number greater than 0")
         ice_cream.set_num_scoops(scoops)
 
-        # --- Toppings ---
+        # create toppings
         toppings_list = []
         print("Which toppings would you like? Enter done if you do not want any.")
         print("Your options are: sprinkles, gummy bears, oreos.")
@@ -215,17 +215,16 @@ def main():
         while True:
             topping_choice = input().strip().lower()
 
-            # validate the topping
+            # validate topping
             temp_top = Topping()
             while not temp_top.validate_topping(topping_choice):
                 print("Please put in a valid topping type.")
                 topping_choice = input().strip().lower()
 
-            # if 'done', stop asking toppings
+            # check to see if done
             if topping_choice == "done":
                 break
 
-            # otherwise set it and add to list
             temp_top.set_type(topping_choice)
 
             print(f"Topping {temp_top.get_type()} added for ${temp_top.get_cost():.2f}")
@@ -233,26 +232,26 @@ def main():
 
             print("Enter done if you are done selecting toppings, or enter another topping.")
 
-        # attach toppings to the ice cream object
+        # add toppings to icecream
         ice_cream.set_toppings(toppings_list)
 
-        # show order so far for this ice cream
+        # show current order
         print("Your order so far:")
         print(ice_cream.ice_cream_info())
 
-        # add this ice cream to the receipt
+        # add icecream to total
         receipt.add(ice_cream)
 
-        # --- Another ice cream? ---
+        # -ask for another ice cream
         another = input("Would you like to order another ice cream? (Yes/No)\n").strip().lower()
         while another not in ["yes", "no", "y", "n"]:
             print("Please input Yes or No!")
             another = input().strip().lower()
 
         if another.startswith("n"):
-            break  # stop ordering
+            break  # stop 
 
-    # all done, print receipt
+    # print the recipt
     receipt.print_receipt()
 
 
