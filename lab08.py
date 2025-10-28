@@ -233,16 +233,17 @@ def main():
         #add receipt
         receipt.add(ice_cream)
 
-        print("Your order so far:")
-        #print(ice_cream.ice_cream_info())
-
-        #prompt for ice cream
+        # ask if they want another
         another = input("Would you like to order another ice cream? (Yes/No)\n").strip().lower()
         while another not in ["yes", "no", "y", "n"]:
             print("Please input Yes or No!")
             another = input().strip().lower()
 
-        if another.startswith("n"):
+        #continue if they do
+        if another.startswith("y"):
+            print("Your order so far:")
+            ordering = "yes"
+        else:
             ordering = "no"
 
     #print receipt
