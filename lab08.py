@@ -215,43 +215,47 @@ def main():
         while True:
             topping_choice = input().strip().lower()
 
-            # validate topping
-            temp_top = Topping()
-            while not temp_top.validate_topping(topping_choice):
+            # validation
+            temp_checker = Topping()
+            while not temp_checker.validate_topping(topping_choice):
                 print("Please put in a valid topping type.")
                 topping_choice = input().strip().lower()
 
-            # check to see if done
+   
             if topping_choice == "done":
                 break
 
+            # make a real topping object
+            temp_top = Topping()
             temp_top.set_type(topping_choice)
 
-            print(f"Topping {temp_top.get_type()} added for ${temp_top.get_cost():.2f}")
+            # add topping to oist
             toppings_list.append(temp_top)
 
+
+            print(f"Topping {temp_top.get_type()} added for ${temp_top.get_cost():.2f}")
             print("Enter done if you are done selecting toppings, or enter another topping.")
 
-        # add toppings to icecream
+
         ice_cream.set_toppings(toppings_list)
 
-        # show current order
+        # show order
         print("Your order so far:")
         print(ice_cream.ice_cream_info())
 
         # add icecream to total
         receipt.add(ice_cream)
 
-        # -ask for another ice cream
+        # sk for another ice cream
         another = input("Would you like to order another ice cream? (Yes/No)\n").strip().lower()
         while another not in ["yes", "no", "y", "n"]:
             print("Please input Yes or No!")
             another = input().strip().lower()
 
         if another.startswith("n"):
-            break  # stop 
+            break 
 
-    # print the recipt
+
     receipt.print_receipt()
 
 
