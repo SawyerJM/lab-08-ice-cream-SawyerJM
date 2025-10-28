@@ -234,6 +234,7 @@ def main():
         receipt.add(ice_cream)
 
         print("Your order so far:")
+        print(ice_cream.ice_cream_info())
 
         #prompt for ice cream
         another = input("Would you like to order another ice cream? (Yes/No)\n").strip().lower()
